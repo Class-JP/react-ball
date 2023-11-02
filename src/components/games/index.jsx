@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Button, ButtonGroup, Table } from "react-bootstrap";
+import { Button, ButtonGroup, Container, Table } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
 import { objectIsEmpty } from '../utils/object.utils'
+import GamesService from "../../services/GamesService";
+
 export class Games extends Component {
   constructor() {
     super();
@@ -12,23 +14,35 @@ export class Games extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // intial mount
     // Assign Data Here!
+
+    const service = new GamesService();
+
+    const fetchedGames = await service.getGames();
+
     this.setState({
-      games: [        {id: 1, description: 'UCL', teamHome: 'Man U', teamVisit: 'RealMadrid'}]
-    })
+      games: fetchedGames
+    });
   }
 
   componentDidUpdate() {
     console.log('Update!', this.state);
-  }
-
-  
+  }  
 
   render() {
     return (
       <div className="container game-list">
+
+        <Container>
+          <NavLink to='/games/new'>
+              <Button>
+                Create New Game!
+              </Button>
+            </NavLink>
+        </Container>
+
         <Table className="table-striped">
           <thead>
             <tr>
@@ -45,7 +59,7 @@ export class Games extends Component {
                 return (
                   <tr key={`games-table-row-${index}`}>
                     <td>{ game.description }</td>
-                    <td>{ game.teamHome }</td>
+                    <td>{ game.teamLocal }</td>
                     <td>{ game.teamVisit }</td>
                     <td>
                       <ButtonGroup>

@@ -1,16 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import GamesService from "../../services/GamesService";
 
 export const ShowGame = () => {
 
+  // Statte para manejar mis datos del componente
   const [game, setGame] = useState({});
+
 
   const { id } = useParams();
 
-  useEffect(() => {
+
+
+  useEffect(() => { 
     // Lets call the api here! then assign the new data
     console.log('Current ID:', id);
+
+    const service = new GamesService();
+
+    service.getGame(id).then((data) => {
+      
+      setGame(data);
+
+    }).catch((error) => {
+      alert(error);
+    });
+
   }, [id]);
 
 

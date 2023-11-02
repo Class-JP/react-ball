@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Button, Form, FormLabel, InputGroup } from "react-bootstrap";
 
-export const GamesForm = ({onSave}) => {
+export const GamesForm = ({ onSave }) => {
 
   const [fields, setFields] = useState({});
-
-
 
   return (
     <Form>
