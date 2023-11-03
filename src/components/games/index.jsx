@@ -4,11 +4,12 @@ import { NavLink } from "react-router-dom";
 
 import { objectIsEmpty } from '../utils/object.utils'
 import GamesService from "../../services/GamesService";
+import { deleteGameAction } from "./actions/delete";
 
 export class Games extends Component {
   constructor() {
     super();
-
+  
     this.state = {
       games: []
     };
@@ -27,9 +28,15 @@ export class Games extends Component {
     });
   }
 
-  componentDidUpdate() {
-    console.log('Update!', this.state);
-  }  
+  onDeleteGame() {
+    const service = new GamesService();
+    service.getGames().then((newList) => {
+
+      this.setState({games: newList});
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
 
   render() {
     return (
@@ -73,7 +80,11 @@ export class Games extends Component {
                             Edit
                           </Button>
                         </NavLink>
-                        <Button className="btn-danger">
+                        <Button
+                          className="btn-danger"
+                          onClick={() => {
+                            deleteGameAction(game.id, this.onDeleteGame.bind(this));
+                          }}>
                           Delete
                         </Button>
                       </ButtonGroup>

@@ -9,15 +9,14 @@ export default class GamesService {
       
       return data;
     } catch (error) {
-      console.log(error);
+      
+      throw error;
     }
   }
 
   async createGame(data) {
     try {
       const response = await axios.post('http://localhost:3001/games', data);
-
-      console.log(response);
 
       return response;
     } catch (error) {
@@ -33,9 +32,31 @@ export default class GamesService {
       
       return data;
     } catch (error) {
-      console.log(error);
 
       throw error;
     }
   }
+
+  async updateGame(id, data) {
+    try {
+      await axios.put(`http://localhost:3001/games/${id}`, data);
+
+      return { status: 'OK' };
+    } catch (error) {
+      
+      throw error;
+    }
+  }
+
+  async deleteGame(id) {
+    try {
+      
+      await axios.delete(`http://localhost:3001/games/${id}`);
+      
+      return {status: 'OK'};
+    } catch (error) {
+      throw error;
+    }
+  }
+
 }

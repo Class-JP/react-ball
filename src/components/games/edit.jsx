@@ -1,20 +1,58 @@
 import React, { useState } from "react";
 import { GamesForm } from "./form";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import GamesService from "../../services/GamesService";
+import Swal from "sweetalert2";
 
 export const EditGame = () => {
   const [game, setGame] = useState({});
 
   const { id } = useParams();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    // Lets call the api here! then assign the new data
-    console.log('Current ID:', id);
+    const service = new GamesService();
+    service
+      .getGame(id)
+      .then((data) => setGame(data))
+      .catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Game cannot be loaded!',
+        });
+        console.error(err);
+      });
   }, [id]);
 
   const onSave = (fields) => {
-    // We Can Create a new Object... {description: ..., teamHome: ..., }
+    const service = new GamesService();
+    service.updateGame(id, fields).then(({status}) => {
+      if (status === 'OK') {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Game Updated!',
+          type: 'success'
+        }).then(() => {
+          navigate('/games');
+        });
+      } else {
+        Swal.fire(
+          'Cannot verify!',
+          'was the game updated?',
+          'question'
+        )
+      }
+    }).catch(err => {
+      console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      })
+    });
   };
 
   return (

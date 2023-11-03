@@ -15,8 +15,6 @@ export const ShowGame = () => {
 
   useEffect(() => { 
     // Lets call the api here! then assign the new data
-    console.log('Current ID:', id);
-
     const service = new GamesService();
 
     service.getGame(id).then((data) => {
